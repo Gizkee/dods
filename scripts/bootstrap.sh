@@ -9,25 +9,29 @@ echo "=== Day of Defeat: Source Server Bootstrap ==="
 echo "This script will clone the DODS server repository and set up the project."
 echo ""
 
+# More robust root detection
+IS_ROOT=false
+if [ "$EUID" -eq 0 ] || [ "$(id -u)" -eq 0 ] || [ "$USER" = "root" ] || [ "$USERNAME" = "root" ]; then
+    IS_ROOT=true
+fi
+
 # Check if sudo is available when running as root (needed for user operations)
-if [ "$EUID" -eq 0 ]; then
+if [ "$IS_ROOT" = true ]; then
+    echo "Detected running as root (UID: $(id -u), User: $(whoami))"
     if ! command -v sudo &> /dev/null; then
         echo "Sudo is not installed. Installing sudo first..."
         if command -v apt &> /dev/null; then
             apt update && apt install -y sudo
-        elif command -v yum &> /dev/null; then
-            yum install -y sudo
-        elif command -v dnf &> /dev/null; then
-            dnf install -y sudo
         else
-            echo "Unable to install sudo automatically. Please install sudo manually and run this script again."
+            echo "This script is designed for Debian/Ubuntu systems with apt package manager."
+            echo "Please install sudo manually and run this script again."
             exit 1
         fi
     fi
 fi
 
 # Optional user setup (if running as root)
-if [ "$EUID" -eq 0 ]; then
+if [ "$IS_ROOT" = true ]; then
     echo "Running as root. You can optionally create a dedicated user for the DODS server."
     echo "This is recommended for security and better organization."
     echo ""
@@ -89,25 +93,14 @@ if ! command -v git &> /dev/null; then
     
     # Install git (sudo is already available if needed)
     if command -v apt &> /dev/null; then
-        if [ "$EUID" -eq 0 ]; then
+        if [ "$IS_ROOT" = true ]; then
             apt update && apt install -y git
         else
             sudo apt update && sudo apt install -y git
         fi
-    elif command -v yum &> /dev/null; then
-        if [ "$EUID" -eq 0 ]; then
-            yum install -y git
-        else
-            sudo yum install -y git
-        fi
-    elif command -v dnf &> /dev/null; then
-        if [ "$EUID" -eq 0 ]; then
-            dnf install -y git
-        else
-            sudo dnf install -y git
-        fi
     else
-        echo "Unable to install git automatically. Please install git manually and run this script again."
+        echo "This script is designed for Debian/Ubuntu systems with apt package manager."
+        echo "Please install git manually and run this script again."
         exit 1
     fi
 fi
@@ -159,7 +152,7 @@ echo "Next steps:"
 echo "1. Navigate to the project directory:"
 echo "   cd $INSTALL_DIR"
 echo ""
-if [ "$EUID" -eq 0 ]; then
+if [ "$IS_ROOT" = true ]; then
     echo "2. Consider creating a dedicated user (or run setup-user.sh):"
     echo "   ./scripts/setup-user.sh"
     echo ""
@@ -169,7 +162,7 @@ else
 fi
 echo "   ./scripts/install-docker.sh"
 echo ""
-if [ "$EUID" -eq 0 ]; then
+if [ "$IS_ROOT" = true ]; then
     echo "4. Deploy the server:"
 else
     echo "3. Deploy the server:"
