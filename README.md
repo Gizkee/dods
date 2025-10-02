@@ -95,21 +95,21 @@ Available variables (with defaults from Dockerfile):
 
 ### Configuration Files
 
-- `config/server.cfg`: Main server configuration (CVars)
-- `config/mapcycle.txt`: Server map cycle list
+- `docker/cfg/server.cfg`: Main server configuration (CVars)
+- `docker/cfg/mapcycle.txt`: Server map cycle list
 
 Edit these files and restart the server to apply changes.
 
 ## Project Structure
 
 ```
-config/
-  server.cfg           # Server settings
-  mapcycle.txt         # Map rotation
 data/                  # Game files (downloaded automatically on first run)
 docker/
   Dockerfile           # Docker image definition
   entry.sh             # Container entry point
+  cfg/                 # Server configuration files
+    server.cfg         # Server settings
+    mapcycle.txt       # Map rotation
 setup/                 # Initial setup scripts (run once)
   bootstrap.sh         # Initial repository setup and cloning
   install-docker.sh    # Install Docker on Ubuntu
