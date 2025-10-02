@@ -204,8 +204,8 @@ fi
 echo "   ./scripts/install-docker.sh"
 echo ""
 if [ "$IS_ROOT" = true ]; then
-    echo "4. Deploy the server:"
+    echo "4. Start the server:"
 else
-    echo "3. Deploy the server:"
+    echo "3. Start the server:"
 fi
-echo "   ./scripts/deploy.sh"
+echo "   ./scripts/start.sh"
