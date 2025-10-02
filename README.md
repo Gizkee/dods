@@ -27,7 +27,7 @@ curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh 
 ```
 
 This will:
-- Clone the repository to `~/dods`
+- Clone the repository to `~/dods` (or directly into home directory if user is named "dods")
 - Install git if missing
 - Make all scripts executable
 - Provide next-step instructions
@@ -153,6 +153,8 @@ curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh 
 DODS_INSTALL_DIR="/opt/dods" \
 curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh | bash
 ```
+
+**Note:** The bootstrap script automatically detects if the current user is named "dods" and installs directly into the home directory to avoid creating `/home/dods/dods/`. You can override this with `DODS_INSTALL_DIR`.
 
 ## Server Updates
 

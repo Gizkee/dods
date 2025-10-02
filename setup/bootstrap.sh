@@ -126,7 +126,14 @@ fi
 
 # Configuration - Update these variables for your setup
 REPO_URL="${DODS_REPO_URL:-https://github.com/Gizkee/dods.git}"
-INSTALL_DIR="${DODS_INSTALL_DIR:-$HOME}"
+
+# Smart directory selection: avoid dods/dods nesting
+if [ "$(basename "$HOME")" = "dods" ] && [ -z "${DODS_INSTALL_DIR:-}" ]; then
+    INSTALL_DIR="$HOME"
+    echo "Detected user 'dods' - installing directly into home directory to avoid nesting"
+else
+    INSTALL_DIR="${DODS_INSTALL_DIR:-$HOME/dods}"
+fi
 
 # Check if git is available
 if ! command -v git &> /dev/null; then
@@ -156,27 +163,45 @@ if [ -d "$INSTALL_DIR/.git" ]; then
     cd "$INSTALL_DIR"
     echo "Updating existing repository..."
     git pull
-elif [ "$(ls -A "$INSTALL_DIR" 2>/dev/null)" ]; then
-    echo "Directory $INSTALL_DIR is not empty and not a git repository."
+elif [ "$(ls -A "$INSTALL_DIR" 2>/dev/null)" ] && [ ! -f "$INSTALL_DIR/start.sh" ]; then
+    echo "Directory $INSTALL_DIR is not empty and doesn't appear to contain DODS files."
     echo "Please either:"
     echo "1. Remove the directory: rm -rf $INSTALL_DIR"
     echo "2. Choose a different directory by setting DODS_INSTALL_DIR environment variable"
     echo "3. Initialize git repository manually in the existing directory"
     exit 1
 else
-    echo "Cloning repository from $REPO_URL to $INSTALL_DIR..."
-    if git clone "$REPO_URL" "$INSTALL_DIR"; then
-        echo "Repository cloned successfully!"
+    # Clone into directory - use different method if cloning into home directory
+    if [ "$INSTALL_DIR" = "$HOME" ]; then
+        echo "Cloning repository from $REPO_URL into home directory..."
         cd "$INSTALL_DIR"
+        if git clone "$REPO_URL" .; then
+            echo "Repository cloned successfully!"
+        else
+            echo "Failed to clone repository. Please check:"
+            echo "1. Repository URL is correct: $REPO_URL"
+            echo "2. You have access to the repository"
+            echo "3. Your network connection is working"
+            echo ""
+            echo "You can set a custom repository URL with:"
+            echo "DODS_REPO_URL='https://github.com/your-username/your-repo.git' $0"
+            exit 1
+        fi
     else
-        echo "Failed to clone repository. Please check:"
-        echo "1. Repository URL is correct: $REPO_URL"
-        echo "2. You have access to the repository"
-        echo "3. Your network connection is working"
-        echo ""
-        echo "You can set a custom repository URL with:"
-        echo "DODS_REPO_URL='https://github.com/your-username/your-repo.git' $0"
-        exit 1
+        echo "Cloning repository from $REPO_URL to $INSTALL_DIR..."
+        if git clone "$REPO_URL" "$INSTALL_DIR"; then
+            echo "Repository cloned successfully!"
+            cd "$INSTALL_DIR"
+        else
+            echo "Failed to clone repository. Please check:"
+            echo "1. Repository URL is correct: $REPO_URL"
+            echo "2. You have access to the repository"
+            echo "3. Your network connection is working"
+            echo ""
+            echo "You can set a custom repository URL with:"
+            echo "DODS_REPO_URL='https://github.com/your-username/your-repo.git' $0"
+            exit 1
+        fi
     fi
 fi
 
