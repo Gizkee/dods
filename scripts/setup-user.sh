@@ -17,8 +17,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Get username from user input
-read -p "Enter username for the new user (default: user): " USERNAME
-USERNAME=${USERNAME:-user}
+read -p "Enter username for the new user (default: dods): " USERNAME
+USERNAME=${USERNAME:-dods}
 
 # Check if user already exists
 if id "$USERNAME" &>/dev/null; then
