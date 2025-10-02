@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # Docker Installation Script for Ubuntu
-# This script installs Docker Engine and Docker Compose on Ubuntu 20.04+
+# This script installs Docker Engine on Ubuntu 20.04+
 
 echo "=== Docker Installation for Ubuntu ==="
-echo "This script will install Docker Engine and Docker Compose."
+echo "This script will install Docker Engine."
 echo ""
 
 # Check if running as regular user with sudo
@@ -52,7 +52,7 @@ sudo apt update
 
 # Install Docker Engine
 echo "Installing Docker..."
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo apt install -y docker-ce docker-ce-cli containerd.io
 
 # Add current user to docker group
 echo "Adding user $USER to docker group..."
@@ -73,9 +73,8 @@ else
 fi
 
 # Show Docker version
-echo "Installed versions:"
+echo "Installed version:"
 docker --version
-docker compose version
 
 echo "Docker installation complete!"
 echo ""

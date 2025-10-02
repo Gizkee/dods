@@ -2,5 +2,5 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-docker compose logs -f dods | cat
+docker logs -f dods-dedicated
 

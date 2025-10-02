@@ -36,18 +36,15 @@ else
     exit 1
 fi
 
-# Create .env if it doesn't exist
-if [ ! -f .env ]; then
-    echo "Creating .env from template..."
-    cp env.example .env
-    echo "Created .env file. Please edit it to configure your server."
-    echo "Important settings to review:"
-    echo "- SERVER_NAME: Your server's public name"
-    echo "- RCON_PASSWORD: Change from default 'changeme'"
-    echo "- STEAM_GSLT: Add your Steam Game Server Login Token for public listing"
-    echo ""
-    read -p "Press Enter to continue after editing .env (or Ctrl+C to exit and edit it)..."
-fi
+echo "You can customize the server by setting environment variables before running start.sh"
+echo "Available environment variables:"
+echo "- DODS_HOSTNAME: Your server's public name (default: 'My DODS Server')"
+echo "- DODS_RCONPW: RCON password (default: 'changeme')"
+echo "- DODS_PORT: Server port (default: 27015)"
+echo "- DODS_MAXPLAYERS: Maximum players (default: 24)"
+echo "- And more... see start.sh for full list"
+echo ""
+echo "Example: DODS_HOSTNAME='My Custom Server' DODS_RCONPW='mypassword' ./scripts/start.sh"
 
 # Make scripts executable
 chmod +x scripts/*.sh
