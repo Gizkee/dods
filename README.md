@@ -1,180 +1,232 @@
-### Day of Defeat: Source Dedicated Server (Docker + Docker Compose)
+# Day of Defeat: Source Dedicated Server (Docker)
 
-This repository provides an easy, one-command setup to run a Day of Defeat: Source dedicated server using Docker and Docker Compose. It includes sensible defaults, configuration templates, and helper scripts so anyone can deploy quickly—even with very basic computer knowledge.
+This repository provides an easy setup to run a Day of Defeat: Source dedicated server using Docker. It includes sensible defaults, configuration templates, and helper scripts for quick deployment.
 
-### Requirements
-- Docker (Engine) 20+
-- Docker Compose v2+
-- Ubuntu 20.04+ (other OSes with Docker should also work)
+## Requirements
 
-### Remote Server Deployment
-For deploying on a fresh Ubuntu server:
+- Docker Engine 20+
+- Ubuntu 20.04+ (other Linux distributions with Docker should also work)
+- Git (automatically installed by bootstrap script if missing)
 
-#### Option 1: Complete Automated Setup (Recommended)
-1) **SSH into your Ubuntu server as root** and run the complete setup:
+## Quick Start
+
+### Option 1: Bootstrap Script (Recommended)
+
+Run this single command to clone the repository and get started:
+
 ```bash
-# Download and run the complete setup (creates user, installs Docker, configures everything)
-curl -fsSL https://raw.githubusercontent.com/your-repo/dodsmylife/main/scripts/initial-server-setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash
 ```
 
-2) **Switch to the DODS user**:
-```bash
-su - dods
-```
+This will:
+- Clone the repository to `~/dods`
+- Install git if missing
+- Make all scripts executable
+- Provide next-step instructions
 
-3) **Copy your DODS server files** to the server:
+### Option 2: Manual Setup
+
+1. **Clone the repository**:
 ```bash
+git clone https://github.com/Gizkee/dods.git ~/dods
 cd ~/dods
-# Copy all files from this repository to ~/dods/
+chmod +x scripts/*.sh
 ```
 
-4) **Start the server**:
+2. **Continue with setup steps below**
+
+## Setup Steps
+
+After running the bootstrap script or manual clone:
+
+### 1. Create User (if needed, run as root)
 ```bash
-./scripts/start.sh
+sudo ./scripts/setup-user.sh
 ```
 
-#### Option 2: Manual User Setup
-If you need to create a user with sudo access first:
-
-1) **SSH into your Ubuntu server as root** and run the user setup:
+### 2. Install Docker
 ```bash
-# Download and run user setup
-curl -fsSL https://raw.githubusercontent.com/your-repo/dodsmylife/main/scripts/setup-user.sh | bash
+./scripts/install-docker.sh
 ```
 
-2) **Switch to the new user** and run the server setup:
+### 3. Deploy the Server
 ```bash
-su - your-username
-./scripts/remote-setup.sh
+./scripts/deploy.sh
 ```
 
-#### Option 3: Step-by-Step Setup
-1) **SSH into your Ubuntu server** and run the setup script:
+## Server Management
+
+- **Start server**: `./scripts/start.sh`
+- **Stop server**: `./scripts/stop.sh`
+- **Restart server**: `./scripts/restart.sh`
+- **View logs**: `./scripts/logs.sh`
+
+## Configuration
+
+### Environment Variables
+
+The server uses environment variables for configuration. You can set them before running the start script:
+
 ```bash
-# Download and run the complete setup
-curl -fsSL https://raw.githubusercontent.com/your-repo/dodsmylife/main/scripts/remote-setup.sh | bash
+# Example with custom settings
+DODS_HOSTNAME="My Custom Server" DODS_MAXPLAYERS=32 ./scripts/start.sh
 ```
 
-2) **Log out and log back in** for Docker group changes to take effect.
-
-3) **Copy your DODS server files** to the server (or clone the repository):
-```bash
-cd ~/dods
-# Copy all files from this repository to ~/dods/
-```
-
-4) **Configure and start the server**:
-```bash
-# Edit configuration
-nano .env
-
-# Start the server
-./scripts/start.sh
-```
-
-### Local Development
-For running locally on your machine:
-
-### Quick Start
-1) Open a terminal and navigate to this project folder.
-
-2) Copy the example environment file and optionally edit it:
-```bash
-cp env.example .env
-```
-
-3) Start the server:
-```bash
-./scripts/start.sh
-```
-
-The first run will download the game server via SteamCMD. This can take a few minutes depending on your internet speed.
-
-### Default Ports
-- 27015/udp and 27015/tcp: Game and RCON
-- 27020/udp: SourceTV
-
-If you need to change ports, edit `.env` and then restart with `./scripts/restart.sh`.
+Available variables (with defaults from Dockerfile):
+- `DODS_HOSTNAME`: Server name (default: "New DoD:S Server")
+- `DODS_RCONPW`: RCON password (default: "changeme")
+- `DODS_PW`: Server password (default: "changeme")
+- `DODS_PORT`: Server port (default: 27015)
+- `DODS_TV_PORT`: SourceTV port (default: 27020)
+- `DODS_MAXPLAYERS`: Maximum players (default: 16)
+- `DODS_TICKRATE`: Server tickrate (default: 66)
+- `DODS_STARTMAP`: Starting map (default: "dod_argentan")
+- `DODS_FPSMAX`: Max FPS (default: 300)
+- `DODS_CFG`: Config file (default: "server.cfg")
+- `DODS_MAPCYCLE`: Map cycle file (default: "mapcycle.txt")
 
 ### Configuration Files
-- `config/server.cfg`: Main server configuration (CVars). This file will be mounted into the container at runtime.
-- `config/mapcycle.txt`: The server map cycle list.
 
-Edit these files locally, then restart the server with `./scripts/restart.sh` to apply changes.
+- `config/server.cfg`: Main server configuration (CVars)
+- `config/mapcycle.txt`: Server map cycle list
 
-### Folder Structure
+Edit these files and restart the server to apply changes.
+
+## Project Structure
+
 ```
 config/
   server.cfg           # Server settings
   mapcycle.txt         # Map rotation
 data/                  # Game files (downloaded automatically on first run)
 docker/
-  Dockerfile
-  entrypoint.sh
+  Dockerfile           # Docker image definition
+  entry.sh             # Container entry point
 scripts/
-  start.sh             # Start or create the server
+  bootstrap.sh         # Initial repository setup and cloning
+  start.sh             # Start the server
   stop.sh              # Stop the server
   restart.sh           # Restart the server
   logs.sh              # Follow server logs
   install-docker.sh    # Install Docker on Ubuntu
   deploy.sh            # Deploy server after Docker installation
   setup-user.sh        # Create user with sudo access (run as root)
-.env.example           # Example environment variables
-docker-compose.yml
 ```
 
-### Environment Variables
-The most common settings are in `.env`:
-- `SERVER_NAME`: Public name of your server
-- `SERVER_PORT`: Port to listen on (default 27015)
-- `RCON_PASSWORD`: RCON password
-- `MAX_PLAYERS`: Max players (e.g., 24)
-- `TICKRATE`: Server tickrate (recommended 66)
-- `START_MAP`: Initial map to load (e.g., `dod_donner`)
-- `SRCDS_ADDITIONAL_ARGS`: Extra arguments to pass to the server
+## Default Ports
 
-### Common Commands
-- Start: `./scripts/start.sh`
-- Stop: `./scripts/stop.sh`
-- Restart: `./scripts/restart.sh`
-- Logs: `./scripts/logs.sh`
+- **27015/udp and 27015/tcp**: Game and RCON
+- **27020/udp**: SourceTV
 
-### Server Setup Commands
-- **User setup only** (root): `./scripts/setup-user.sh`
-- **Docker installation**: `./scripts/install-docker.sh`
-- **Deploy after setup**: `./scripts/deploy.sh`
+## Advanced Usage
 
-### Script Architecture
-All setup scripts now use shared functions from `common.sh` to eliminate duplication:
-- **Common functions**: System updates, Docker installation, firewall configuration
-- **Modular design**: Each script focuses on its specific purpose
-- **Consistent logging**: Color-coded output for better user experience
-- **Error handling**: Proper validation and error messages
+### Persistent Configuration
 
-### Updating the Server
-Valve updates are handled by SteamCMD. To update:
+For permanent configuration, you can set environment variables in your shell profile:
+
+```bash
+# Add to ~/.bashrc or ~/.zshrc
+export DODS_HOSTNAME="My Permanent Server"
+export DODS_MAXPLAYERS=24
+export DODS_RCONPW="mysecretpassword"
+```
+
+### Custom Repository URL
+
+The bootstrap script supports custom repository URLs:
+
+```bash
+DODS_REPO_URL="https://github.com/yourusername/your-dods-fork.git" \
+curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash
+```
+
+### Custom Installation Directory
+
+```bash
+DODS_INSTALL_DIR="/opt/dods" \
+curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash
+```
+
+## Server Updates
+
+Valve updates are handled automatically by SteamCMD. To update your server:
+
 ```bash
 ./scripts/restart.sh
 ```
+
 The container will run SteamCMD on startup and ensure the server is up-to-date before launching.
 
-### Notes on Steam GSLT (Server Token)
-- To appear on the public server list reliably, set `STEAM_GSLT` in `.env` using a token created at `https://steamcommunity.com/dev/managegameservers` with App ID `300` (Day of Defeat: Source).
-- If you only play on a LAN, you can leave `STEAM_GSLT` empty and set `SRCDS_ADDITIONAL_ARGS="+sv_lan 1"`.
+## Steam GSLT (Server Token)
 
-### Backups
-All downloaded game files and server data live in `data/`. Back up this folder to preserve your installation, downloaded workshop content, and any saved data.
+- To appear on the public server list, set `DODS_PW` to empty and optionally get a Steam Game Server Login Token
+- Create a token at https://steamcommunity.com/dev/managegameservers with App ID `300` (Day of Defeat: Source)
+- For LAN-only servers, you can use the default settings
 
-### Uninstall
+## Backups
+
+All game files and server data are stored in the `data/` directory. Back up this folder to preserve:
+- Downloaded game files
+- Workshop content
+- Server logs and data
+
+## Troubleshooting
+
+### Common Issues
+
+- **Ports in use**: Change `DODS_PORT` environment variable and restart
+- **First boot is slow**: Server downloads game files via SteamCMD (normal)
+- **Permission errors**: Ensure scripts are executable with `chmod +x scripts/*.sh`
+
+### Reset to Clean Install
+
 ```bash
 ./scripts/stop.sh
-docker compose down --volumes
+sudo rm -rf data/
+./scripts/start.sh
 ```
-Then remove this project folder if you wish.
 
-### Troubleshooting
-- If ports are in use, change `SERVER_PORT` in `.env` and restart.
-- First boot takes time while the server downloads—this is normal.
-- To reset to a clean install, stop the server and delete the `data/` folder, then start again.
+### View Container Status
 
+```bash
+docker ps
+docker logs dods-dedicated
+```
 
+## Uninstall
+
+```bash
+./scripts/stop.sh
+docker rmi dods
+rm -rf ~/dods
+```
+
+## Development
+
+### Building Custom Image
+
+```bash
+docker build -t dods ./docker
+```
+
+### Running with Custom Settings
+
+```bash
+docker run -d \
+  --name dods-dedicated \
+  -e DODS_HOSTNAME="Test Server" \
+  -e DODS_MAXPLAYERS=8 \
+  -p 27015:27015/udp \
+  -p 27015:27015/tcp \
+  -p 27020:27020/udp \
+  -v "$(pwd)/data:/home/steam/dods-dedicated" \
+  dods
+```
+
+## Contributing
+
+Feel free to submit issues and pull requests to improve this setup!
+
+## License
+
+This project is open source. The Day of Defeat: Source server files are owned by Valve Corporation.
