@@ -112,7 +112,7 @@ if [ "$IS_ROOT" = true ]; then
         echo ""
         echo "Please switch to the new user and run the bootstrap script again:"
         echo "  su - $NEW_USERNAME"
-        echo "  curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash"
+        echo "  curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh | bash"
         echo ""
         echo "If you configured SSH keys, you can SSH as the new user:"
         echo "  ssh $NEW_USERNAME@your-server-ip"
@@ -195,13 +195,13 @@ echo "   cd $INSTALL_DIR"
 echo ""
 if [ "$IS_ROOT" = true ]; then
     echo "2. Consider creating a dedicated user (or run setup-user.sh):"
-    echo "   ./scripts/setup-user.sh"
+    echo "   ./setup/setup-user.sh"
     echo ""
     echo "3. Install Docker:"
 else
     echo "2. Install Docker:"
 fi
-echo "   ./scripts/install-docker.sh"
+echo "   ./setup/install-docker.sh"
 echo ""
 if [ "$IS_ROOT" = true ]; then
     echo "4. Start the server:"

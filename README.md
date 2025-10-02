@@ -15,7 +15,7 @@ This repository provides an easy setup to run a Day of Defeat: Source dedicated 
 Run this single command to clone the repository and get started:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash
+curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh | bash
 ```
 
 This will:
@@ -30,7 +30,7 @@ This will:
 ```bash
 git clone https://github.com/Gizkee/dods.git ~/dods
 cd ~/dods
-chmod +x scripts/*.sh
+chmod +x scripts/*.sh setup/*.sh
 ```
 
 2. **Continue with setup steps below**
@@ -41,17 +41,17 @@ After running the bootstrap script or manual clone:
 
 ### 1. Create User (if needed, run as root)
 ```bash
-sudo ./scripts/setup-user.sh
+sudo ./setup/setup-user.sh
 ```
 
 ### 2. Install Docker
 ```bash
-./scripts/install-docker.sh
+./setup/install-docker.sh
 ```
 
-### 3. Deploy the Server
+### 3. Start the Server
 ```bash
-./scripts/deploy.sh
+./scripts/start.sh
 ```
 
 ## Server Management
@@ -102,14 +102,14 @@ data/                  # Game files (downloaded automatically on first run)
 docker/
   Dockerfile           # Docker image definition
   entry.sh             # Container entry point
-scripts/
-  bootstrap.sh         # Initial repository setup and cloning
+scripts/               # Runtime scripts
   start.sh             # Start the server
   stop.sh              # Stop the server
   restart.sh           # Restart the server
   logs.sh              # Follow server logs
+setup/                 # Initial setup scripts
+  bootstrap.sh         # Initial repository setup and cloning
   install-docker.sh    # Install Docker on Ubuntu
-  deploy.sh            # Deploy server after Docker installation
   setup-user.sh        # Create user with sudo access (run as root)
 ```
 
@@ -137,14 +137,14 @@ The bootstrap script supports custom repository URLs:
 
 ```bash
 DODS_REPO_URL="https://github.com/yourusername/your-dods-fork.git" \
-curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash
+curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh | bash
 ```
 
 ### Custom Installation Directory
 
 ```bash
 DODS_INSTALL_DIR="/opt/dods" \
-curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash
+curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh | bash
 ```
 
 ## Server Updates
@@ -176,7 +176,7 @@ All game files and server data are stored in the `data/` directory. Back up this
 
 - **Ports in use**: Change `DODS_PORT` environment variable and restart
 - **First boot is slow**: Server downloads game files via SteamCMD (normal)
-- **Permission errors**: Ensure scripts are executable with `chmod +x scripts/*.sh`
+- **Permission errors**: Ensure scripts are executable with `chmod +x scripts/*.sh setup/*.sh`
 
 ### Reset to Clean Install
 

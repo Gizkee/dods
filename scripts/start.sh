@@ -40,13 +40,13 @@ echo ""
 
 # Check if Docker is available
 if ! command -v docker &> /dev/null; then
-    echo "Docker is not installed. Please run ./scripts/install-docker.sh first."
+    echo "Docker is not installed. Please run ./setup/install-docker.sh first."
     exit 1
 fi
 
 # Check if user is in docker group
 if ! groups $USER | grep -q docker; then
-    echo "User is not in docker group. Please log out and log back in after running ./scripts/install-docker.sh"
+    echo "User is not in docker group. Please log out and log back in after running ./setup/install-docker.sh"
     echo "Or run: sudo usermod -aG docker $USER && newgrp docker"
     exit 1
 fi
