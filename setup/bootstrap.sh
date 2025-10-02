@@ -182,7 +182,7 @@ fi
 
 # Make all scripts executable
 echo "Making scripts executable..."
-chmod +x scripts/*.sh
+chmod +x *.sh setup/*.sh
 
 # Show next steps
 echo ""
@@ -208,4 +208,4 @@ if [ "$IS_ROOT" = true ]; then
 else
     echo "3. Start the server:"
 fi
-echo "   ./scripts/start.sh"
+echo "   ./start.sh"

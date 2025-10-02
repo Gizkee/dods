@@ -30,7 +30,7 @@ This will:
 ```bash
 git clone https://github.com/Gizkee/dods.git ~/dods
 cd ~/dods
-chmod +x scripts/*.sh setup/*.sh
+chmod +x *.sh setup/*.sh
 ```
 
 2. **Continue with setup steps below**
@@ -51,15 +51,15 @@ sudo ./setup/setup-user.sh
 
 ### 3. Start the Server
 ```bash
-./scripts/start.sh
+./start.sh
 ```
 
 ## Server Management
 
-- **Start server**: `./scripts/start.sh`
-- **Stop server**: `./scripts/stop.sh`
-- **Restart server**: `./scripts/restart.sh`
-- **View logs**: `./scripts/logs.sh`
+- **Start server**: `./start.sh`
+- **Stop server**: `./stop.sh`
+- **Restart server**: `./restart.sh`
+- **View logs**: `./logs.sh`
 
 ## Configuration
 
@@ -69,7 +69,7 @@ The server uses environment variables for configuration. You can set them before
 
 ```bash
 # Example with custom settings
-DODS_HOSTNAME="My Custom Server" DODS_MAXPLAYERS=32 ./scripts/start.sh
+DODS_HOSTNAME="My Custom Server" DODS_MAXPLAYERS=32 ./start.sh
 ```
 
 Available variables (with defaults from Dockerfile):
@@ -102,15 +102,14 @@ data/                  # Game files (downloaded automatically on first run)
 docker/
   Dockerfile           # Docker image definition
   entry.sh             # Container entry point
-scripts/               # Runtime scripts
-  start.sh             # Start the server
-  stop.sh              # Stop the server
-  restart.sh           # Restart the server
-  logs.sh              # Follow server logs
-setup/                 # Initial setup scripts
+setup/                 # Initial setup scripts (run once)
   bootstrap.sh         # Initial repository setup and cloning
   install-docker.sh    # Install Docker on Ubuntu
   setup-user.sh        # Create user with sudo access (run as root)
+start.sh               # Start the server
+stop.sh                # Stop the server  
+restart.sh             # Restart the server
+logs.sh                # Follow server logs
 ```
 
 ## Default Ports
@@ -152,7 +151,7 @@ curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh 
 Valve updates are handled automatically by SteamCMD. To update your server:
 
 ```bash
-./scripts/restart.sh
+./restart.sh
 ```
 
 The container will run SteamCMD on startup and ensure the server is up-to-date before launching.
@@ -176,14 +175,14 @@ All game files and server data are stored in the `data/` directory. Back up this
 
 - **Ports in use**: Change `DODS_PORT` environment variable and restart
 - **First boot is slow**: Server downloads game files via SteamCMD (normal)
-- **Permission errors**: Ensure scripts are executable with `chmod +x scripts/*.sh setup/*.sh`
+- **Permission errors**: Ensure scripts are executable with `chmod +x *.sh setup/*.sh`
 
 ### Reset to Clean Install
 
 ```bash
-./scripts/stop.sh
+./stop.sh
 sudo rm -rf data/
-./scripts/start.sh
+./start.sh
 ```
 
 ### View Container Status
@@ -196,7 +195,7 @@ docker logs dods-dedicated
 ## Uninstall
 
 ```bash
-./scripts/stop.sh
+./stop.sh
 docker rmi dods
 rm -rf ~/dods
 ```

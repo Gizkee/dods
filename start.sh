@@ -20,20 +20,18 @@ if [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "-h" ]]; then
     echo ""
     echo "Usage examples:"
     echo "# Use default settings:"
-    echo "./scripts/start.sh"
+    echo "./start.sh"
     echo ""
     echo "# Custom server name and players:"
-    echo "DODS_HOSTNAME='My Custom Server' DODS_MAXPLAYERS=32 ./scripts/start.sh"
+    echo "DODS_HOSTNAME='My Custom Server' DODS_MAXPLAYERS=32 ./start.sh"
     echo ""
     echo "# Full customization:"
     echo "export DODS_HOSTNAME='My Server'"
     echo "export DODS_RCONPW='mypassword'"
     echo "export DODS_MAXPLAYERS=24"
-    echo "./scripts/start.sh"
+    echo "./start.sh"
     exit 0
 fi
-
-cd "$(dirname "$0")/.."
 
 echo "=== Starting Day of Defeat: Source Server ==="
 echo ""
@@ -54,8 +52,8 @@ fi
 # Show environment variable info if no custom variables are set
 if [ -z "${DODS_HOSTNAME:-}" ] && [ -z "${DODS_MAXPLAYERS:-}" ] && [ -z "${DODS_RCONPW:-}" ]; then
     echo "Using default server settings. You can customize by setting environment variables:"
-    echo "Example: DODS_HOSTNAME='My Server' DODS_MAXPLAYERS=32 ./scripts/start.sh"
-    echo "Run './scripts/start.sh --help' for full list of variables."
+    echo "Example: DODS_HOSTNAME='My Server' DODS_MAXPLAYERS=32 ./start.sh"
+    echo "Run './start.sh --help' for full list of variables."
     echo ""
 fi
 
@@ -97,11 +95,11 @@ echo "Server: ${DODS_HOSTNAME:-New DoD:S Server}"
 echo "Port: ${DODS_PORT:-27015}"
 echo ""
 echo "Useful commands:"
-echo "- View logs: ./scripts/logs.sh"
-echo "- Stop server: ./scripts/stop.sh"  
-echo "- Restart server: ./scripts/restart.sh"
+echo "- View logs: ./logs.sh"
+echo "- Stop server: ./stop.sh"  
+echo "- Restart server: ./restart.sh"
 echo ""
 echo "The server will be available on port ${DODS_PORT:-27015}."
 echo "First startup may take a few minutes while SteamCMD downloads the game files."
-echo "Follow startup: ./scripts/logs.sh"
+echo "Follow startup: ./logs.sh"
 
