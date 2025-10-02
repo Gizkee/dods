@@ -24,8 +24,8 @@ su - dods
 
 3) **Copy your DODS server files** to the server:
 ```bash
-cd ~/dods-server
-# Copy all files from this repository to ~/dods-server/
+cd ~/dods
+# Copy all files from this repository to ~/dods/
 ```
 
 4) **Start the server**:
@@ -59,8 +59,8 @@ curl -fsSL https://raw.githubusercontent.com/your-repo/dodsmylife/main/scripts/r
 
 3) **Copy your DODS server files** to the server (or clone the repository):
 ```bash
-cd ~/dods-server
-# Copy all files from this repository to ~/dods-server/
+cd ~/dods
+# Copy all files from this repository to ~/dods/
 ```
 
 4) **Configure and start the server**:
@@ -116,12 +116,9 @@ scripts/
   stop.sh              # Stop the server
   restart.sh           # Restart the server
   logs.sh              # Follow server logs
-  common.sh            # Shared functions for all scripts
-  setup-server.sh      # Initial Ubuntu server setup
-  deploy.sh            # Deploy server after setup
-  remote-setup.sh      # Complete remote server setup
+  install-docker.sh    # Install Docker on Ubuntu
+  deploy.sh            # Deploy server after Docker installation
   setup-user.sh        # Create user with sudo access (run as root)
-  initial-server-setup.sh # Complete initial setup (run as root)
 .env.example           # Example environment variables
 docker-compose.yml
 ```
@@ -143,11 +140,9 @@ The most common settings are in `.env`:
 - Logs: `./scripts/logs.sh`
 
 ### Server Setup Commands
-- **Complete initial setup** (root): `./scripts/initial-server-setup.sh`
 - **User setup only** (root): `./scripts/setup-user.sh`
-- **Server setup only**: `./scripts/setup-server.sh`
+- **Docker installation**: `./scripts/install-docker.sh`
 - **Deploy after setup**: `./scripts/deploy.sh`
-- **Complete remote setup**: `./scripts/remote-setup.sh`
 
 ### Script Architecture
 All setup scripts now use shared functions from `common.sh` to eliminate duplication:

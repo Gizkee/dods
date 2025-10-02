@@ -8,7 +8,7 @@ docker stop dods-dedicated 2>/dev/null || true
 docker rm dods-dedicated 2>/dev/null || true
 
 # Build the image
-docker build -t dods-server ./docker
+docker build -t dods ./docker
 
 # Run the container
 docker run -d \
@@ -29,7 +29,7 @@ docker run -d \
   -p "${DODS_PORT}:${DODS_PORT}/udp" \
   -p "${DODS_PORT}:${DODS_PORT}/tcp" \
   -p "${DODS_TV_PORT}:${DODS_TV_PORT}/udp" \
-  dods-server
+  dods
 
 echo "Server starting. Follow logs with ./scripts/logs.sh"
 
