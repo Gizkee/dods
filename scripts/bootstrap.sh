@@ -32,6 +32,7 @@ fi
 
 # Optional user setup (if running as root)
 if [ "$IS_ROOT" = true ]; then
+    echo ""
     echo "Running as root. You can optionally create a dedicated user for the DODS server."
     echo "This is recommended for security and better organization."
     echo ""
@@ -125,7 +126,7 @@ fi
 
 # Configuration - Update these variables for your setup
 REPO_URL="${DODS_REPO_URL:-https://github.com/Gizkee/dods.git}"
-INSTALL_DIR="${DODS_INSTALL_DIR:-$HOME/dods}"
+INSTALL_DIR="${DODS_INSTALL_DIR:-$HOME}"
 
 # Check if git is available
 if ! command -v git &> /dev/null; then
