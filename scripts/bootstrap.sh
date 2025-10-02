@@ -82,7 +82,7 @@ if [ "$IS_ROOT" = true ]; then
             
             # Set password
             echo "Setting password for user '$NEW_USERNAME':"
-            passwd "$NEW_USERNAME"
+            passwd "$NEW_USERNAME" < /dev/tty
             
             echo "User '$NEW_USERNAME' created successfully!"
         fi
