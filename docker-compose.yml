@@ -1,0 +1,29 @@
+services:
+  dods:
+    build:
+      context: ./docker
+    container_name: dods-dedicated
+    restart: unless-stopped
+    environment:
+      - DODS_HOSTNAME=${DODS_HOSTNAME}
+      - DODS_TICKRATE=${DODS_TICKRATE}
+      - DODS_PORT=${DODS_PORT}
+      - DODS_TV_PORT=${DODS_TV_PORT}
+      - DODS_MAXPLAYERS=${DODS_MAXPLAYERS}
+      - DODS_RCONPW=${DODS_RCONPW}
+      - DODS_PW=${DODS_PW}
+      - DODS_STARTMAP=${DODS_STARTMAP}
+      - DODS_CFG=${DODS_CFG}
+      - DODS_MAPCYCLE=${DODS_MAPCYCLE}
+      - DODS_FPSMAX=${DODS_FPSMAX}
+    volumes:
+      - ./data:/home/steam/dods-dedicated
+    ports:
+      - "${DODS_PORT}:${DODS_PORT}/udp"
+      - "${DODS_PORT}:${DODS_PORT}/tcp"
+      - "${DODS_TV_PORT}:${DODS_TV_PORT}/udp"
+
+  # Optional: watch logs with `docker compose logs -f dods`
+
+volumes: {}
+
