@@ -11,7 +11,7 @@ echo ""
 
 # More robust root detection
 IS_ROOT=false
-if [ "$EUID" -eq 0 ] || [ "$(id -u)" -eq 0 ] || [ "$USER" = "root" ] || [ "$USERNAME" = "root" ]; then
+if [ "$EUID" -eq 0 ] || [ "$(id -u)" -eq 0 ] || [ "${USER:-}" = "root" ] || [ "${USERNAME:-}" = "root" ]; then
     IS_ROOT=true
 fi
 
