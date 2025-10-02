@@ -113,12 +113,8 @@ if [ "$IS_ROOT" = true ]; then
         echo "  su - $NEW_USERNAME"
         echo "  curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash"
         echo ""
-        echo "Or if you configured SSH keys, you can SSH as the new user:"
+        echo "If you configured SSH keys, you can SSH as the new user:"
         echo "  ssh $NEW_USERNAME@your-server-ip"
-        echo ""
-        echo "Or if you have the script locally:"
-        echo "  su - $NEW_USERNAME"
-        echo "  cd /path/to/script && ./bootstrap.sh"
         echo ""
         exit 0
     else
