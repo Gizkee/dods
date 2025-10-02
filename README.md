@@ -15,7 +15,7 @@ This repository provides an easy setup to run a Day of Defeat: Source dedicated 
 On fresh Ubuntu installations, ensure `curl` is installed:
 
 ```bash
-sudo apt update && sudo apt install -y curl
+apt update && sudo apt install -y curl
 ```
 
 ### Option 1: Bootstrap Script (Recommended)
