@@ -49,6 +49,44 @@ if ! groups $USER | grep -q docker; then
     exit 1
 fi
 
+# Check if Docker daemon is running
+echo "Checking Docker daemon status..."
+if ! docker version &> /dev/null; then
+    echo "Docker daemon is not running. Attempting to start it..."
+    
+    # Try different methods to start Docker daemon
+    if command -v systemctl &> /dev/null && [ -d /run/systemd/system ]; then
+        echo "Using systemd to start Docker..."
+        sudo systemctl start docker
+    elif command -v service &> /dev/null; then
+        echo "Using service command to start Docker..."
+        sudo service docker start
+    else
+        echo "Could not automatically start Docker daemon."
+        echo "Please start Docker manually:"
+        echo "  sudo service docker start"
+        echo "Or if using Docker Desktop, make sure it's running."
+        exit 1
+    fi
+    
+    # Wait a moment and check again
+    echo "Waiting for Docker daemon to start..."
+    sleep 3
+    
+    if ! docker version &> /dev/null; then
+        echo "Failed to start Docker daemon. Please check:"
+        echo "1. Docker installation: docker --version"
+        echo "2. Start Docker manually: sudo service docker start"
+        echo "3. Check Docker status: sudo service docker status"
+        echo "4. If using WSL, Docker Desktop must be running on Windows"
+        exit 1
+    fi
+    
+    echo "Docker daemon started successfully!"
+else
+    echo "Docker daemon is running."
+fi
+
 # Show environment variable info if no custom variables are set
 if [ -z "${DODS_HOSTNAME:-}" ] && [ -z "${DODS_MAXPLAYERS:-}" ] && [ -z "${DODS_RCONPW:-}" ]; then
     echo "Using default server settings. You can customize by setting environment variables:"

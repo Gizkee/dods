@@ -184,6 +184,11 @@ All game files and server data are stored in the `data/` directory. Back up this
 - **Ports in use**: Change `DODS_PORT` environment variable and restart
 - **First boot is slow**: Server downloads game files via SteamCMD (normal)
 - **Permission errors**: Ensure scripts are executable with `chmod +x *.sh setup/*.sh`
+- **Docker daemon not running**: 
+  - Error: `Cannot connect to Docker daemon at unix:///var/run/docker.sock`
+  - Solution: `sudo service docker start` or ensure Docker Desktop is running
+  - WSL users: Make sure Docker Desktop is running on Windows
+- **User not in docker group**: Log out and back in after running install-docker.sh
 
 ### Reset to Clean Install
 
