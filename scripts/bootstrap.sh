@@ -16,6 +16,23 @@ INSTALL_DIR="${DODS_INSTALL_DIR:-$HOME/dods}"
 # Check if git is available
 if ! command -v git &> /dev/null; then
     echo "Git is not installed. Installing git..."
+    
+    # Check if sudo is available, install if missing
+    if ! command -v sudo &> /dev/null; then
+        echo "Sudo is not installed. Installing sudo first..."
+        if command -v apt &> /dev/null; then
+            apt update && apt install -y sudo
+        elif command -v yum &> /dev/null; then
+            yum install -y sudo
+        elif command -v dnf &> /dev/null; then
+            dnf install -y sudo
+        else
+            echo "Unable to install sudo automatically. Please install sudo manually and run this script again."
+            exit 1
+        fi
+    fi
+    
+    # Now install git with sudo
     if command -v apt &> /dev/null; then
         sudo apt update && sudo apt install -y git
     elif command -v yum &> /dev/null; then
