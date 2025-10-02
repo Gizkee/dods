@@ -105,29 +105,52 @@ fi
 
 # Enable and start Docker service
 echo "Enabling and starting Docker..."
-if [[ $IS_ROOT == true ]]; then
-    systemctl enable docker
-    systemctl start docker
+
+# Check if systemd is available
+if command -v systemctl &> /dev/null && [ -d /run/systemd/system ]; then
+    echo "Using systemd to manage Docker service..."
+    if [[ $IS_ROOT == true ]]; then
+        systemctl enable docker
+        systemctl start docker
+    else
+        sudo systemctl enable docker
+        sudo systemctl start docker
+    fi
+elif command -v service &> /dev/null; then
+    echo "Using service command to start Docker..."
+    if [[ $IS_ROOT == true ]]; then
+        service docker start
+    else
+        sudo service docker start
+    fi
+    echo "Note: Docker may not auto-start on boot without systemd. You may need to start it manually."
 else
-    sudo systemctl enable docker
-    sudo systemctl start docker
+    echo "Warning: Could not detect init system. Docker service may need to be started manually."
+    echo "Try: sudo service docker start"
+    echo "Or check if Docker daemon is already running: docker version"
 fi
 
 # Verify Docker installation
 echo "Verifying Docker installation..."
+
+# Wait a moment for Docker daemon to start
+sleep 2
+
 if [[ $IS_ROOT == true ]]; then
     if docker run --rm hello-world &> /dev/null; then
-        echo "Docker installed successfully!"
+        echo "Docker installed and working successfully!"
     else
-        echo "Docker installation verification failed."
-        exit 1
+        echo "Docker installed but verification failed. This might be normal in some environments (WSL, containers)."
+        echo "Try running: docker version"
+        echo "If Docker daemon isn't running, try: sudo service docker start"
     fi
 else
     if sudo docker run --rm hello-world &> /dev/null; then
-        echo "Docker installed successfully!"
+        echo "Docker installed and working successfully!"
     else
-        echo "Docker installation verification failed."
-        exit 1
+        echo "Docker installed but verification failed. This might be normal in some environments (WSL, containers)."
+        echo "Try running: docker version"
+        echo "If Docker daemon isn't running, try: sudo service docker start"
     fi
 fi
 
