@@ -42,12 +42,12 @@ if [ "$IS_ROOT" = true ]; then
         echo "=== User Setup ==="
         
         # Get username
-        read -p "Enter username for DODS server (default: dods): " USERNAME
-        USERNAME=${USERNAME:-dods}
+        read -p "Enter username for DODS server (default: dods): " NEW_USERNAME
+        NEW_USERNAME=${NEW_USERNAME:-dods}
         
         # Check if user already exists
-        if id "$USERNAME" &>/dev/null; then
-            echo "User '$USERNAME' already exists."
+        if id "$NEW_USERNAME" &>/dev/null; then
+            echo "User '$NEW_USERNAME' already exists."
             read -p "Do you want to continue with existing user? (y/n): " CONTINUE_EXISTING
             if [[ ! $CONTINUE_EXISTING =~ ^[Yy]$ ]]; then
                 echo "Exiting. Please choose a different username or remove the existing user."
@@ -55,25 +55,25 @@ if [ "$IS_ROOT" = true ]; then
             fi
         else
             # Create user with home directory and add to sudo group
-            echo "Creating user '$USERNAME'..."
-            useradd -m -s /bin/bash "$USERNAME"
-            usermod -aG sudo "$USERNAME"
+            echo "Creating user '$NEW_USERNAME'..."
+            useradd -m -s /bin/bash "$NEW_USERNAME"
+            usermod -aG sudo "$NEW_USERNAME"
             
             # Set password
-            echo "Setting password for user '$USERNAME':"
-            passwd "$USERNAME"
+            echo "Setting password for user '$NEW_USERNAME':"
+            passwd "$NEW_USERNAME"
             
-            echo "User '$USERNAME' created successfully!"
+            echo "User '$NEW_USERNAME' created successfully!"
         fi
         
         echo ""
         echo "=== User Created ==="
         echo "Please switch to the new user and run the bootstrap script again:"
-        echo "  su - $USERNAME"
+        echo "  su - $NEW_USERNAME"
         echo "  curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/scripts/bootstrap.sh | bash"
         echo ""
         echo "Or if you have the script locally:"
-        echo "  su - $USERNAME"
+        echo "  su - $NEW_USERNAME"
         echo "  cd /path/to/script && ./bootstrap.sh"
         echo ""
         exit 0
