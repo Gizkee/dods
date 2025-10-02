@@ -27,7 +27,7 @@ curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh 
 ```
 
 This will:
-- Clone the repository to `~/dods` (or directly into home directory if user is named "dods")
+- Clone the repository to `~/dods-server`
 - Install git if missing
 - Make all scripts executable
 - Provide next-step instructions
@@ -36,8 +36,8 @@ This will:
 
 1. **Clone the repository**:
 ```bash
-git clone https://github.com/Gizkee/dods.git ~/dods
-cd ~/dods
+git clone https://github.com/Gizkee/dods.git ~/dods-server
+cd ~/dods-server
 chmod +x *.sh setup/*.sh
 ```
 
@@ -154,8 +154,6 @@ DODS_INSTALL_DIR="/opt/dods" \
 curl -sSL https://raw.githubusercontent.com/Gizkee/dods/main/setup/bootstrap.sh | bash
 ```
 
-**Note:** The bootstrap script automatically detects if the current user is named "dods" and installs directly into the home directory to avoid creating `/home/dods/dods/`. You can override this with `DODS_INSTALL_DIR`.
-
 ## Server Updates
 
 Valve updates are handled automatically by SteamCMD. To update your server:
@@ -207,7 +205,7 @@ docker logs dods-dedicated
 ```bash
 ./stop.sh
 docker rmi dods
-rm -rf ~/dods
+rm -rf ~/dods-server
 ```
 
 ## Development
