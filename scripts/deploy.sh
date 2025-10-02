@@ -19,10 +19,6 @@ if ! groups $USER | grep -q docker; then
     exit 1
 fi
 
-# Create project directory if it doesn't exist
-mkdir -p ~/dods
-cd ~/dods
-
 # Clone or update the repository
 if [ -d ".git" ]; then
     echo "Updating existing repository..."
@@ -32,7 +28,7 @@ else
     # Note: Replace with your actual repository URL
     echo "Please clone your repository here first:"
     echo "git clone <your-repo-url> ."
-    echo "Or copy the files manually to ~/dods/"
+    echo "Or copy the files manually to the repository directory"
     exit 1
 fi
 
