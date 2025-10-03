@@ -5,14 +5,27 @@ This repository provides an easy setup to run a Day of Defeat: Source dedicated 
 ## Requirements
 
 - Docker Engine 20+
-- Ubuntu 20.04+ (other Linux distributions with Docker should also work)
+- **Debian 9+ (Stretch)** or **Ubuntu 20.04+** 
 - Git (automatically installed by bootstrap script if missing)
+
+### Supported Operating Systems
+
+| OS | Version | Status | Notes |
+|---|---|---|---|
+| **Debian** | 11 (Bullseye) | ✅ Fully Supported | Recommended |
+| **Debian** | 10 (Buster) | ✅ Fully Supported | Recommended |
+| **Debian** | 9 (Stretch) | ✅ Supported | Minimum version |
+| **Ubuntu** | 22.04 LTS | ✅ Fully Supported | Recommended |
+| **Ubuntu** | 20.04 LTS | ✅ Fully Supported | Recommended |
+| **Ubuntu** | 18.04 LTS | ✅ Supported | End of life April 2023 |
+
+**Note**: Other Debian-based distributions (Linux Mint, etc.) should work but are not officially tested.
 
 ## Quick Start
 
 ### Prerequisites
 
-On fresh Ubuntu installations, ensure `curl` is installed:
+On fresh Debian/Ubuntu installations, ensure `curl` is installed:
 
 ```bash
 apt update && apt install -y curl
@@ -112,7 +125,7 @@ docker/
     mapcycle.txt       # Map rotation
 setup/                 # Initial setup scripts (run once)
   bootstrap.sh         # Initial repository setup and cloning
-  install-docker.sh    # Install Docker on Ubuntu
+  install-docker.sh    # Install Docker on Debian/Ubuntu
   setup-user.sh        # Create user with sudo access (run as root)
 start.sh               # Start the server
 stop.sh                # Stop the server  
@@ -188,6 +201,7 @@ All game files and server data are stored in the `data/` directory. Back up this
   - Error: `Cannot connect to Docker daemon at unix:///var/run/docker.sock`
   - Solution: `sudo service docker start` or ensure Docker Desktop is running
   - WSL users: Make sure Docker Desktop is running on Windows
+  - Debian/Ubuntu: Check `sudo systemctl status docker`
 - **User not in docker group**: Log out and back in after running install-docker.sh
 
 ### Reset to Clean Install

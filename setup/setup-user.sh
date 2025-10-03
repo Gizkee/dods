@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# User Setup Script for Ubuntu Server
+# User Setup Script for Debian/Ubuntu Server
 # This script creates a new user with sudo access
 # Run this as root or with sudo
 
-echo "=== Ubuntu User Setup ==="
+echo "=== Debian/Ubuntu User Setup ==="
 echo "This script will create a new user with sudo access."
 echo ""
 

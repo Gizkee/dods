@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Docker Installation Script for Ubuntu
-# This script installs Docker Engine on Ubuntu 20.04+
+# Docker Installation Script for Debian/Ubuntu
+# This script installs Docker Engine on Debian 9+ and Ubuntu 20.04+
 
-echo "=== Docker Installation for Ubuntu ==="
+echo "=== Docker Installation for Debian/Ubuntu ==="
 echo "This script will install Docker Engine."
 echo ""
 
@@ -63,20 +63,30 @@ else
         software-properties-common
 fi
 
-# Add Docker's official GPG key
-echo "Adding Docker GPG key..."
-if [[ $IS_ROOT == true ]]; then
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+# Detect OS for correct repository
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS_ID=$ID
 else
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo "Cannot detect OS. Assuming Ubuntu..."
+    OS_ID="ubuntu"
+fi
+
+# Add Docker's official GPG key
+echo "Adding Docker GPG key for ${OS_ID}..."
+if [[ $IS_ROOT == true ]]; then
+    curl -fsSL https://download.docker.com/linux/${OS_ID}/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+else
+    curl -fsSL https://download.docker.com/linux/${OS_ID}/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 fi
 
 # Add Docker repository
 echo "Adding Docker repository..."
+
 if [[ $IS_ROOT == true ]]; then
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/${OS_ID} $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 else
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/${OS_ID} $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 fi
 
 # Update package index after adding repository
