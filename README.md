@@ -4,9 +4,45 @@ This repository provides an easy setup to run a Day of Defeat: Source dedicated 
 
 ## Requirements
 
+### System Requirements
+
 - Docker Engine 20+
 - **Debian 9+ (Stretch)** or **Ubuntu 20.04+** 
 - Git (automatically installed by bootstrap script if missing)
+
+### Hardware & Bandwidth Requirements
+
+Day of Defeat: Source server requirements for smooth gameplay without lag or network issues:
+
+| Players | CPU | RAM | Storage | Bandwidth (Up/Down) | Tickrate | Notes |
+|---------|-----|-----|---------|-------------------|----------|-------|
+| **1-8** | 1 vCPU<br/>2.0+ GHz | 1 GB | 4 GB SSD | 5 Mbps / 10 Mbps | 66 Hz | Small private server |
+| **8-16** | 2 vCPU<br/>2.4+ GHz | 2 GB | 6 GB SSD | 10 Mbps / 20 Mbps | 66 Hz | **Default config** |
+| **16-24** | 2-4 vCPU<br/>2.8+ GHz | 3 GB | 8 GB SSD | 15 Mbps / 30 Mbps | 66 Hz | Medium server |
+| **24-32** | 4 vCPU<br/>3.0+ GHz | 4 GB | 10 GB SSD | 20 Mbps / 40 Mbps | 66 Hz | Large server |
+
+#### Additional Requirements:
+- **Network Latency**: < 50ms to players for optimal experience
+- **CPU Architecture**: x64 (AMD64/Intel 64-bit)
+- **CPU Type**: **Dedicated/Non-shared CPU cores** (avoid burstable instances like AWS t2/t3)
+- **Network**: Unmetered bandwidth recommended for 16+ players
+- **Storage Type**: SSD strongly recommended (faster map loading)
+- **Port Requirements**: UDP/TCP 27015 (game), UDP 27020 (SourceTV)
+
+#### Cloud Provider Recommendations:
+
+**For 8-16 players (2 dedicated CPU cores, 4GB+ RAM):**
+- **Hetzner CCX13** (~$16/month) - Best value, AMD EPYC dedicated cores
+- **OVH b2-7** (~$21/month) - Good performance, European locations  
+- **Vultr High Performance** (~$24/month) - High-frequency dedicated cores
+- **Linode Dedicated 4GB** (~$30/month) - Reliable, good global network
+- **DigitalOcean CPU-Optimized c-2** (~$48/month) - Premium performance, excellent documentation
+
+**⚠️ Avoid for Game Servers:**
+- AWS t2/t3/t4g (burstable CPU), Google Cloud e2 (shared CPU), Azure B-series (burstable CPU)
+- Hetzner CX series (shared vCPU), any "shared" or "burstable" CPU instances
+
+*Costs are approximate and may vary by region*
 
 ### Supported Operating Systems
 
